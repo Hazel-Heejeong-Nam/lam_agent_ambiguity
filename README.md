@@ -1,6 +1,9 @@
-# OTF Latent Action Models
+# Latent Actions from Factorized Transition Effects under Agent Ambiguity
 
-This repository trains an OTF-VQ-VAE motion vocabulary, an OTF-LAM or DINO-LAM latent action model, and downstream policies on DCS datasets.
+by [Heejeong Nam](https://hazel-heejeong-nam.github.io/), Chandradithya S Jonnagaladda,[Harshit Aggarwal](https://harshitaggarwal01.github.io/), [Eric Xu](https://scholar.google.com/citations?user=xnSDXe4AAAAJ&hl=en), [Randall Balestriero](https://randallbalestriero.github.io/).
+
+* Paper: Soon
+* Read our Blog Post 📃: [https://hazel-heejeong-nam.github.io/LAM/](https://hazel-heejeong-nam.github.io/LAM/)
 
 ## Layout
 
