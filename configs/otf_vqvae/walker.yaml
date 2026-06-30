@@ -1,0 +1,100 @@
+run_name: otf_vqvae_walker_${now:%Y%m%d_%H%M%S}_reference_occupancy
+output_dir: /cs/data/people/hnam16/otf_vqvae_runs/${run_name}
+seed: 0
+device: auto
+
+data:
+  type: walker-run
+  path: "data/walker-run-test.hdf5"
+  sequence_key: observations
+  tau: 2
+  image_height: 98
+  image_width: 98
+  channels: 3
+  resize_to_input: true
+  scale_uint8: true
+  max_sequences: null
+  max_frames_per_video: null
+  obs_key: obs
+  video_glob: "*.mp4"
+  recursive: true
+  seed: ${seed}
+  num_sequences: 64
+  sequence_length: 9
+
+model:
+  model_type: otf_vqvae
+  image_height: ${data.image_height}
+  image_width: ${data.image_width}
+  channels: ${data.channels}
+  patch_height: 7
+  patch_width: 7
+  latent_dim: 32
+  latent_action_dim: 32
+  encoder_hidden_dim: 128
+  decoder_feature_dim: 64
+  decoder_hidden_dim: 128
+  descriptor_hidden_dim: 128
+  reference_hidden_dim: 16
+  reference_feature_dim: 16
+  activation: gelu
+  use_positional_encoding: true
+  motion_input_type: velocity
+  motion_transform: none
+  use_reference_conditioning: true
+  codebook_size: 128
+  codebook_update: ema
+  codebook_init: kmeans
+  ema_decay: 0.99
+  random_std: 1.0
+  dead_code_steps: 1000
+  summary_eps: 1.0e-8
+  orth_active_only: true
+  gaussian_sigma: 1.5
+  kmeans_batches: 8
+  kmeans_max_tokens: 20000
+  kmeans_iters: 20
+  kmeans_seed: ${seed}
+
+train:
+  num_epochs: 10
+  warmup_epoch: 1
+  batch_size: 32
+  shuffle: true
+  drop_last: false
+  num_workers: 4
+  log_every: 10
+  resume_path: null
+  resume_optimizer: true
+
+optim:
+  lr: 1e-4
+  weight_decay: 0.0
+  grad_clip_norm: 1.0
+
+loss:
+  lambda_code: 1.0
+  lambda_commit: 0.25
+  lambda_orth: 1e-4
+
+checkpoint:
+  save: true
+  save_final: true
+  every_steps: 100
+  dir: ${output_dir}/checkpoints
+
+wandb:
+  enabled: true
+  project: lam-otf_vqvae
+  entity: heejeong_nam-brown-university
+  name: ${run_name}
+  mode: online
+  dir: ${output_dir}/wandb
+  tags: []
+  log_config: true
+
+hydra:
+  run:
+    dir: ${output_dir}
+  job:
+    chdir: false
